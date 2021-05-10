@@ -31,7 +31,7 @@ float _Opacity;
 
 float GetRandom(float2 p, float offs)
 {
-    return GenerateHashedRandomFloat((p + offs) * _ScreenParams.xy) * 2 - 1;
+    return GenerateHashedRandomFloat((p + offs + 2) * _ScreenParams.xy) * 2 - 1;
 }
 
 float GetNoise(float2 p, float offs)
@@ -57,8 +57,8 @@ float2 GetGradient(float2 p)
     const float2 dx = float2(1.0 / 400, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
-    ldx += GetRandom(p, 0) * 0.0001;
-    ldy += GetRandom(p, 1) * 0.0001;
+    ldx += GetRandom(p, 0) * 0.01;
+    ldy += GetRandom(p, 1) * 0.01;
     return float2(ldx, ldy);
 }
 
@@ -79,8 +79,8 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_n = p;
     float2 p_c_p = p;
 
-    const uint Iteration = 24;
-    const float Stride = 1.0 / 1000;
+    const uint Iteration = 20;
+    const float Stride = 1.0 / 800;
 
     float  acc_e = 0;
     float3 acc_c = 0;
