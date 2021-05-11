@@ -28,12 +28,15 @@ Varyings Vertex(Attributes input)
 TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
 float _Opacity;
-float4 _EffectParams;
+float2 _EffectParams1;
+float3 _EffectParams2;
 
-#define NOISE_FREQ      _EffectParams.x
-#define NOISE_AMOUNT    _EffectParams.y
-#define BLUR_WIDTH      _EffectParams.z
-#define EDGE_CONTRAST   _EffectParams.w
+#define NOISE_FREQ      _EffectParams1.x
+#define NOISE_AMOUNT    _EffectParams1.y
+
+#define BLUR_WIDTH      _EffectParams2.x
+#define HUE_SHIFT       _EffectParams2.y
+#define EDGE_CONTRAST   _EffectParams2.z
 
 //
 // Basic math functions
@@ -113,7 +116,8 @@ float3 ProcessFill(inout float2 p, float stride)
 {
     float2 grad = GetGradient(p);
     p += normalize(grad) * stride;
-    return SampleColor(p);
+    float shift = SampleNoise(p * 0.1).r * 2;
+    return SampleColor(p) * HsvToRgb(float3(shift, HUE_SHIFT, 1));
 }
 
 //

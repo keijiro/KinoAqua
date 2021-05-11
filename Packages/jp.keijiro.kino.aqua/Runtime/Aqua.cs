@@ -14,6 +14,7 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public ClampedFloatParameter noiseFrequency = new ClampedFloatParameter(1, 0, 2);
     public ClampedFloatParameter noiseStrength = new ClampedFloatParameter(1, 0, 2);
     public ClampedFloatParameter blurWidth = new ClampedFloatParameter(1, 0, 2);
+    public ClampedFloatParameter hueShift = new ClampedFloatParameter(0.1f, 0, 0.3f);
     public ClampedFloatParameter edgeContrast = new ClampedFloatParameter(1, 0, 4);
     public TextureParameter noiseTexture = new TextureParameter(null);
 
@@ -26,7 +27,8 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
         public static int Opacity = Shader.PropertyToID("_Opacity");
         public static int InputTexture = Shader.PropertyToID("_InputTexture");
         public static int NoiseTexture = Shader.PropertyToID("_NoiseTexture");
-        public static int EffectParams = Shader.PropertyToID("_EffectParams");
+        public static int EffectParams1 = Shader.PropertyToID("_EffectParams1");
+        public static int EffectParams2 = Shader.PropertyToID("_EffectParams2");
     }
 
     Material _material;
@@ -52,11 +54,12 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public override void Render
       (CommandBuffer cmd, HDCamera camera, RTHandle srcRT, RTHandle destRT)
     {
-        var eparams = new Vector4(noiseFrequency.value, noiseStrength.value,
-                                  blurWidth.value, edgeContrast.value);
+        var p1 = new Vector2(noiseFrequency.value, noiseStrength.value);
+        var p2 = new Vector3(blurWidth.value, hueShift.value, edgeContrast.value);
 
         _material.SetFloat(ShaderIDs.Opacity, opacity.value);
-        _material.SetVector(ShaderIDs.EffectParams, eparams);
+        _material.SetVector(ShaderIDs.EffectParams1, p1);
+        _material.SetVector(ShaderIDs.EffectParams2, p2);
         _material.SetTexture(ShaderIDs.InputTexture, srcRT);
         _material.SetTexture(ShaderIDs.NoiseTexture, noiseTexture.value);
 
