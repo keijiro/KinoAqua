@@ -28,18 +28,16 @@ Varyings Vertex(Attributes input)
 TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
 
-uint _Iteration;
 float _Opacity;
+float4 _EdgeColor;
+float4 _FillColor;
+float4 _EffectParams;
+uint _Iteration;
 
-float2 _EffectParams1;
-float3 _EffectParams2;
-
-#define NOISE_FREQ      _EffectParams1.x
-#define NOISE_AMOUNT    _EffectParams1.y
-
-#define BLUR_WIDTH      _EffectParams2.x
-#define HUE_SHIFT       _EffectParams2.y
-#define EDGE_CONTRAST   _EffectParams2.z
+#define EDGE_CONTRAST   _EffectParams.x
+#define NOISE_FREQ      _EffectParams.y
+#define HUE_SHIFT       _EffectParams.z
+#define BLUR_WIDTH      _EffectParams.w
 
 //
 // Basic math functions
@@ -99,7 +97,7 @@ float2 GetGradient(float2 p)
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
     float2 n = (SampleNoise(p * 0.4 * NOISE_FREQ).gb - 0.5);
-    return float2(ldx, ldy) + n * 0.05 * NOISE_AMOUNT;
+    return float2(ldx, ldy) + n * 0.05;
 }
 
 //
@@ -110,9 +108,9 @@ float ProcessEdge(inout float2 p, float stride)
 {
     float2 grad = GetGradient(p);
     float edge = saturate(length(grad) * 10);
-    float pattern = SampleNoise(p * 0.8 * NOISE_FREQ).r;
+    float pattern = SampleNoise(p * 0.8).r;
     p += normalize(Rotate90(grad)) * stride;
-    return lerp(1, pattern, edge);
+    return pattern * edge;
 }
 
 float3 ProcessFill(inout float2 p, float stride)
@@ -140,7 +138,7 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_n = p;
     float2 p_c_p = p;
 
-    const float Stride = 0.002 * BLUR_WIDTH;
+    const float Stride = 0.04 * BLUR_WIDTH;
 
     float  acc_e = 0;
     float3 acc_c = 0;
@@ -167,11 +165,13 @@ float4 Fragment(Varyings input) : SV_Target
 
     acc_e = saturate((acc_e - 0.5) * EDGE_CONTRAST + 0.5);
 
-    float3 rgb = acc_c * acc_e;
+    // Color blending
 
-    // Blending with the source color
+    float3 rgb_e = lerp(1, _EdgeColor.rgb, _EdgeColor.a * acc_e);
+    float3 rgb_f = lerp(1, acc_c, _FillColor.a) * _FillColor.rgb;
 
     uint2 positionSS = input.texcoord * _ScreenSize.xy;
     float4 src = LOAD_TEXTURE2D_X(_InputTexture, positionSS);
-    return float4(lerp(src.rgb, rgb, _Opacity), src.a);
+
+    return float4(lerp(src.rgb, rgb_e * rgb_f, _Opacity), src.a);
 }
