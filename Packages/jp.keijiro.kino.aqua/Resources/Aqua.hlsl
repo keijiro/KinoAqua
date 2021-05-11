@@ -35,9 +35,9 @@ float4 _EffectParams;
 uint _Iteration;
 
 #define EDGE_CONTRAST   _EffectParams.x
-#define NOISE_FREQ      _EffectParams.y
-#define HUE_SHIFT       _EffectParams.z
-#define BLUR_WIDTH      _EffectParams.w
+#define BLUR_WIDTH      _EffectParams.y
+#define BLUR_FREQ       _EffectParams.z
+#define HUE_SHIFT       _EffectParams.w
 
 //
 // Basic math functions
@@ -91,12 +91,12 @@ float3 SampleNoise(float2 p)
 // Gradient function
 //
 
-float2 GetGradient(float2 p)
+float2 GetGradient(float2 p, float freq)
 {
     const float2 dx = float2(1.0 / 200, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
-    float2 n = (SampleNoise(p * 0.4 * NOISE_FREQ).gb - 0.5);
+    float2 n = (SampleNoise(p * 0.4 * freq).gb - 0.5);
     return float2(ldx, ldy) + n * 0.05;
 }
 
@@ -106,7 +106,7 @@ float2 GetGradient(float2 p)
 
 float ProcessEdge(inout float2 p, float stride)
 {
-    float2 grad = GetGradient(p);
+    float2 grad = GetGradient(p, 1);
     float edge = saturate(length(grad) * 10);
     float pattern = SampleNoise(p * 0.8).r;
     p += normalize(Rotate90(grad)) * stride;
@@ -115,7 +115,7 @@ float ProcessEdge(inout float2 p, float stride)
 
 float3 ProcessFill(inout float2 p, float stride)
 {
-    float2 grad = GetGradient(p);
+    float2 grad = GetGradient(p, BLUR_FREQ);
     p += normalize(grad) * stride;
     float shift = SampleNoise(p * 0.1).r * 2;
     return SampleColor(p) * HsvToRgb(float3(shift, HUE_SHIFT, 1));
@@ -138,7 +138,7 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_n = p;
     float2 p_c_p = p;
 
-    const float Stride = 0.04 * BLUR_WIDTH;
+    const float Stride = 0.04 / _Iteration;
 
     float  acc_e = 0;
     float3 acc_c = 0;
@@ -153,8 +153,8 @@ float4 Fragment(Varyings input) : SV_Target
         sum_e += w_e * 2;
 
         float w_c = 0.2 + (float)i / _Iteration;
-        acc_c += ProcessFill(p_c_n, -Stride) * w_c;
-        acc_c += ProcessFill(p_c_p, +Stride) * w_c * 0.3;
+        acc_c += ProcessFill(p_c_n, -Stride * BLUR_WIDTH) * w_c;
+        acc_c += ProcessFill(p_c_p, +Stride * BLUR_WIDTH) * w_c * 0.3;
         sum_c += w_c * 1.3;
     }
 

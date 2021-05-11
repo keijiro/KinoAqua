@@ -16,10 +16,10 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public ClampedFloatParameter edgeContrast = new ClampedFloatParameter(1.2f, 0.01f, 4);
     [Space]
     public ColorParameter fillColor = new ColorParameter(Color.white);
-    public ClampedFloatParameter noiseFrequency = new ClampedFloatParameter(0.5f, 0, 1);
+    public ClampedFloatParameter blurWidth = new ClampedFloatParameter(1, 0, 2);
+    public ClampedFloatParameter blurFrequency = new ClampedFloatParameter(0.5f, 0, 1);
     public ClampedFloatParameter hueShift = new ClampedFloatParameter(0.1f, 0, 0.3f);
     [Space]
-    public ClampedFloatParameter blurWidth = new ClampedFloatParameter(1, 0, 2);
     public ClampedIntParameter iteration = new ClampedIntParameter(20, 4, 32);
 
     #endregion
@@ -68,10 +68,9 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public override void Render
       (CommandBuffer cmd, HDCamera camera, RTHandle srcRT, RTHandle destRT)
     {
-        var eparams = new Vector4(edgeContrast.value,
-                                  Mathf.Exp((noiseFrequency.value - 0.5f) * 6),
-                                  hueShift.value,
-                                  blurWidth.value / iteration.value);
+        var bfreq = Mathf.Exp((blurFrequency.value - 0.5f) * 6);
+        var eparams = new Vector4
+          (edgeContrast.value, blurWidth.value, bfreq, hueShift.value);
 
         _material.SetFloat(ShaderIDs.Opacity, opacity.value);
         _material.SetColor(ShaderIDs.EdgeColor, edgeColor.value);
