@@ -28,6 +28,12 @@ Varyings Vertex(Attributes input)
 TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
 float _Opacity;
+float4 _EffectParams;
+
+#define NOISE_FREQ      _EffectParams.x
+#define NOISE_AMOUNT    _EffectParams.y
+#define BLUR_WIDTH      _EffectParams.z
+#define EDGE_CONTRAST   _EffectParams.w
 
 //
 // Basic math functions
@@ -86,8 +92,8 @@ float2 GetGradient(float2 p)
     const float2 dx = float2(1.0 / 200, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
-    float2 n = (SampleNoise(p * 0.4).gb - 0.5);
-    return float2(ldx, ldy) + n * 0.05;
+    float2 n = (SampleNoise(p * 0.4 * NOISE_FREQ).gb - 0.5);
+    return float2(ldx, ldy) + n * 0.05 * NOISE_AMOUNT;
 }
 
 //
@@ -98,7 +104,7 @@ float ProcessEdge(inout float2 p, float stride)
 {
     float2 grad = GetGradient(p);
     float edge = saturate(length(grad) * 10);
-    float pattern = SampleNoise(p * 0.8).r;
+    float pattern = SampleNoise(p * 0.8 * NOISE_FREQ).r;
     p += normalize(Rotate90(grad)) * stride;
     return lerp(1, pattern, edge);
 }
@@ -126,7 +132,7 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_p = p;
 
     const uint Iteration = 24;
-    const float Stride = 0.002;
+    const float Stride = 0.002 * BLUR_WIDTH;
 
     float  acc_e = 0;
     float3 acc_c = 0;
@@ -148,6 +154,8 @@ float4 Fragment(Varyings input) : SV_Target
 
     acc_e /= sum_e;
     acc_c /= sum_c;
+
+    acc_e = saturate((acc_e - 0.5) * EDGE_CONTRAST + 0.5);
 
     return float4(acc_c * acc_e, 1);
 }
