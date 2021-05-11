@@ -27,7 +27,10 @@ Varyings Vertex(Attributes input)
 
 TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
+
+uint _Iteration;
 float _Opacity;
+
 float2 _EffectParams1;
 float3 _EffectParams2;
 
@@ -83,7 +86,7 @@ float SampleLuminance(float2 p)
 
 float3 SampleNoise(float2 p)
 {
-    return SAMPLE_TEXTURE2D(_NoiseTexture, s_linear_repeat_sampler, p);
+    return SAMPLE_TEXTURE2D(_NoiseTexture, s_linear_repeat_sampler, p).rgb;
 }
 
 //
@@ -135,7 +138,6 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_n = p;
     float2 p_c_p = p;
 
-    const uint Iteration = 24;
     const float Stride = 0.002 * BLUR_WIDTH;
 
     float  acc_e = 0;
@@ -143,14 +145,14 @@ float4 Fragment(Varyings input) : SV_Target
     float  sum_e = 0;
     float  sum_c = 0;
 
-    for (uint i = 0; i < Iteration; i++)
+    for (uint i = 0; i < _Iteration; i++)
     {
-        float w_e = 1.5 - (float)i / Iteration;
+        float w_e = 1.5 - (float)i / _Iteration;
         acc_e += ProcessEdge(p_e_n, -Stride) * w_e;
         acc_e += ProcessEdge(p_e_p, +Stride) * w_e;
         sum_e += w_e * 2;
 
-        float w_c = 0.2 + (float)i / Iteration;
+        float w_c = 0.2 + (float)i / _Iteration;
         acc_c += ProcessFill(p_c_n, -Stride) * w_c;
         acc_c += ProcessFill(p_c_p, +Stride) * w_c * 0.3;
         sum_c += w_c * 1.3;
