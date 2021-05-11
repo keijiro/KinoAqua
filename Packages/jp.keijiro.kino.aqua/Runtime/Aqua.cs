@@ -20,6 +20,7 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public ClampedFloatParameter blurFrequency = new ClampedFloatParameter(0.5f, 0, 1);
     public ClampedFloatParameter hueShift = new ClampedFloatParameter(0.1f, 0, 0.3f);
     [Space]
+    public ClampedFloatParameter interval = new ClampedFloatParameter(1, 0.1f, 5);
     public ClampedIntParameter iteration = new ClampedIntParameter(20, 4, 32);
 
     #endregion
@@ -28,10 +29,10 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
 
     static class ShaderIDs
     {
-        public static int Opacity = Shader.PropertyToID("_Opacity");
+        public static int EffectParams1 = Shader.PropertyToID("_EffectParams1");
+        public static int EffectParams2 = Shader.PropertyToID("_EffectParams2");
         public static int EdgeColor = Shader.PropertyToID("_EdgeColor");
         public static int FillColor = Shader.PropertyToID("_FillColor");
-        public static int EffectParams = Shader.PropertyToID("_EffectParams");
         public static int Iteration = Shader.PropertyToID("_Iteration");
         public static int InputTexture = Shader.PropertyToID("_InputTexture");
         public static int NoiseTexture = Shader.PropertyToID("_NoiseTexture");
@@ -69,13 +70,15 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
       (CommandBuffer cmd, HDCamera camera, RTHandle srcRT, RTHandle destRT)
     {
         var bfreq = Mathf.Exp((blurFrequency.value - 0.5f) * 6);
-        var eparams = new Vector4
-          (edgeContrast.value, blurWidth.value, bfreq, hueShift.value);
 
-        _material.SetFloat(ShaderIDs.Opacity, opacity.value);
+        _material.SetVector(ShaderIDs.EffectParams1,
+          new Vector4(opacity.value, interval.value,blurWidth.value, bfreq));
+
+        _material.SetVector(ShaderIDs.EffectParams2,
+          new Vector2(edgeContrast.value, hueShift.value));
+
         _material.SetColor(ShaderIDs.EdgeColor, edgeColor.value);
         _material.SetColor(ShaderIDs.FillColor, fillColor.value);
-        _material.SetVector(ShaderIDs.EffectParams, eparams);
         _material.SetInt(ShaderIDs.Iteration, iteration.value);
         _material.SetTexture(ShaderIDs.InputTexture, srcRT);
         _material.SetTexture(ShaderIDs.NoiseTexture, NoiseTexture);

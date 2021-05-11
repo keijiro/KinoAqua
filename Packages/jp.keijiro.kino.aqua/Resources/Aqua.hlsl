@@ -28,16 +28,18 @@ Varyings Vertex(Attributes input)
 TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
 
-float _Opacity;
+float4 _EffectParams1;
+float2 _EffectParams2;
 float4 _EdgeColor;
 float4 _FillColor;
-float4 _EffectParams;
 uint _Iteration;
 
-#define EDGE_CONTRAST   _EffectParams.x
-#define BLUR_WIDTH      _EffectParams.y
-#define BLUR_FREQ       _EffectParams.z
-#define HUE_SHIFT       _EffectParams.w
+#define OPACITY         _EffectParams1.x
+#define INTERVAL        _EffectParams1.y
+#define BLUR_WIDTH      _EffectParams1.z
+#define BLUR_FREQ       _EffectParams1.w
+#define EDGE_CONTRAST   _EffectParams2.x
+#define HUE_SHIFT       _EffectParams2.y
 
 //
 // Basic math functions
@@ -93,7 +95,7 @@ float3 SampleNoise(float2 p)
 
 float2 GetGradient(float2 p, float freq)
 {
-    const float2 dx = float2(1.0 / 200, 0);
+    const float2 dx = float2(INTERVAL / 200, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
     float2 n = (SampleNoise(p * 0.4 * freq).gb - 0.5);
@@ -173,5 +175,5 @@ float4 Fragment(Varyings input) : SV_Target
     uint2 positionSS = input.texcoord * _ScreenSize.xy;
     float4 src = LOAD_TEXTURE2D_X(_InputTexture, positionSS);
 
-    return float4(lerp(src.rgb, rgb_e * rgb_f, _Opacity), src.a);
+    return float4(lerp(src.rgb, rgb_e * rgb_f, OPACITY), src.a);
 }
