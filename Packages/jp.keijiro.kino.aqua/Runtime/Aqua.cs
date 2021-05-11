@@ -17,7 +17,6 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     public ClampedFloatParameter noiseStrength = new ClampedFloatParameter(1, 0, 2);
     public ClampedFloatParameter hueShift = new ClampedFloatParameter(0.1f, 0, 0.3f);
     public ClampedFloatParameter edgeContrast = new ClampedFloatParameter(1, 0, 4);
-    public TextureParameter noiseTexture = new TextureParameter(null);
 
     #endregion
 
@@ -34,6 +33,15 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
     }
 
     Material _material;
+
+    #endregion
+
+    #region Ttexture asset (via Resources)
+
+    static Texture2D _noiseTexture;
+
+    static Texture2D NoiseTexture
+      => _noiseTexture = _noiseTexture ?? Resources.Load<Texture2D>("KinoAquaNoise");
 
     #endregion
 
@@ -63,7 +71,7 @@ public sealed class Aqua : CustomPostProcessVolumeComponent, IPostProcessCompone
         _material.SetVector(ShaderIDs.EffectParams1, p1);
         _material.SetVector(ShaderIDs.EffectParams2, p2);
         _material.SetTexture(ShaderIDs.InputTexture, srcRT);
-        _material.SetTexture(ShaderIDs.NoiseTexture, noiseTexture.value);
+        _material.SetTexture(ShaderIDs.NoiseTexture, NoiseTexture);
 
         HDUtils.DrawFullScreen(cmd, _material, destRT, null, 0);
     }

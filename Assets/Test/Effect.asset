@@ -28,22 +28,7 @@ MonoBehaviour:
   saturation:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Effect
-  m_EditorClassIdentifier: 
-  components:
-  - {fileID: -3236456346269275866}
-  - {fileID: 6774146464622462129}
---- !u!114 &6774146464622462129
+--- !u!114 &-1533610146348690375
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,6 +44,36 @@ MonoBehaviour:
   opacity:
     m_OverrideState: 1
     m_Value: 1
-  noiseTexture:
-    m_OverrideState: 1
-    m_Value: {fileID: 2800000, guid: 78b5e41a3a01c4aca9be171d2c3e33f5, type: 3}
+  iteration:
+    m_OverrideState: 0
+    m_Value: 20
+  blurWidth:
+    m_OverrideState: 0
+    m_Value: 1
+  noiseFrequency:
+    m_OverrideState: 0
+    m_Value: 1
+  noiseStrength:
+    m_OverrideState: 0
+    m_Value: 1
+  hueShift:
+    m_OverrideState: 0
+    m_Value: 0.1
+  edgeContrast:
+    m_OverrideState: 0
+    m_Value: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
+  m_Name: Effect
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: -3236456346269275866}
+  - {fileID: -1533610146348690375}
