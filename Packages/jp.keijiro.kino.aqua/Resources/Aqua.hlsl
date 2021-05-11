@@ -131,6 +131,8 @@ float4 Fragment(Varyings input) : SV_Target
 {
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
+    // Gradient oriented blur effect
+
     float2 p = UV2SC(input.texcoord);
 
     float2 p_e_n = p;
@@ -158,10 +160,18 @@ float4 Fragment(Varyings input) : SV_Target
         sum_c += w_c * 1.3;
     }
 
+    // Normalization and contrast
+
     acc_e /= sum_e;
     acc_c /= sum_c;
 
     acc_e = saturate((acc_e - 0.5) * EDGE_CONTRAST + 0.5);
 
-    return float4(acc_c * acc_e, 1);
+    float3 rgb = acc_c * acc_e;
+
+    // Blending with the source color
+
+    uint2 positionSS = input.texcoord * _ScreenSize.xy;
+    float4 src = LOAD_TEXTURE2D_X(_InputTexture, positionSS);
+    return float4(lerp(src.rgb, rgb, _Opacity), src.a);
 }
