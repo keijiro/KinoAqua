@@ -68,8 +68,7 @@ float SampleLuminance(float2 p)
 
 float2 GetGradient(float2 p)
 {
-    float l = SampleLuminance(p);
-    const float2 dx = float2(1.0 / 400, 0);
+    const float2 dx = float2(1.0 / 200, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
     return float2(ldx, ldy) + RandomVector(p) / 100;
@@ -84,9 +83,11 @@ float ProcessEdge(inout float2 p, float stride)
 {
     float2 grad = GetGradient(p);
     float edge = saturate(length(grad) * 10);
-    float bw = smoothstep(0.5, 0.7, GetNoise(p * 0.2));
+    //float bw = smoothstep(0.45, 0.55, GetNoise(p * 0.4));
+    float bw = GetNoise(p * 0.2);
     p += normalize(Rotate90(grad)) * stride;
-    return lerp(1, bw, smoothstep(0.4, 1, edge));
+    //return lerp(1, bw, smoothstep(0.4, 1, edge));
+    return lerp(1, bw, edge);
 }
 
 float3 ProcessFill(inout float2 p, float stride)
@@ -107,25 +108,30 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_n = p;
     float2 p_c_p = p;
 
-    const uint Iteration = 20;
+    const uint Iteration = 24;
     const float Stride = 1.0 / 800;
 
     float  acc_e = 0;
     float3 acc_c = 0;
+    float  sum_e = 0;
     float  sum_c = 0;
 
     for (uint i = 0; i < Iteration; i++)
     {
-        float w_c = 0.5 + (float)i / Iteration;
-        acc_e += ProcessEdge(p_e_n, Stride * -2);
-        acc_e += ProcessEdge(p_e_p, Stride * +2);
-        acc_c += ProcessFill(p_c_n, -Stride) * w_c;
-        acc_c += ProcessFill(p_c_p, +Stride) * w_c * 0.3;
+        float w_e = 1.5 - (float)i / Iteration;
+        float w_c = 0.2 + (float)i / Iteration;
+        acc_e += ProcessEdge(p_e_n, Stride * -1.8) * w_e;
+        acc_e += ProcessEdge(p_e_p, Stride * +1.8) * w_e;
+        sum_e += w_e * 2;
+        acc_c += ProcessFill(p_c_n, -Stride * 1.8) * w_c;
+        acc_c += ProcessFill(p_c_p, +Stride * 1.8) * w_c * 0.3;
         sum_c += w_c * 1.3;
     }
 
-    acc_e /= Iteration * 2;
+    acc_e /= sum_e;
     acc_c /= sum_c;
+    //acc_e = smoothstep(0.0, 1, acc_e);
+    //acc_c = 1;
 
     return float4(acc_c * acc_e, 1);
 }
