@@ -63,6 +63,8 @@ MonoBehaviour:
   afterPostProcessCustomPostProcesses:
   - Kino.PostProcessing.Aqua, Kino.Postprocessing.Aqua.Runtime, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
+  - Kino.PostProcessing.Overlay, Kino.Postprocessing, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   beforeTAACustomPostProcesses: []
   lightLayerName0: Light Layer default
   lightLayerName1: Light Layer 1
