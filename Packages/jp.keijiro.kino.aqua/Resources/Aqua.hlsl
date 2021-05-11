@@ -29,6 +29,20 @@ TEXTURE2D(_InputTexture);
 TEXTURE2D(_NoiseTexture);
 float _Opacity;
 
+//
+// Basic math functions
+//
+
+float2 Rotate90(float2 v)
+{
+    return v.yx * float2(-1, 1);
+}
+
+//
+// Coordinate system conversion
+//
+
+// UV to vertically normalized screen coordinates
 float2 UV2SC(float2 uv)
 {
     float2 p = uv - 0.5;
@@ -36,24 +50,16 @@ float2 UV2SC(float2 uv)
     return p;
 }
 
+// Vertically normalized screen coordinates to UV
 float2 SC2UV(float2 p)
 {
     p.x *= _ScreenParams.y / _ScreenParams.x;
     return p + 0.5;
 }
 
-float2 RandomVector(float2 p)
-{
-    float2 res = _ScreenParams.xy;
-    float x = GenerateHashedRandomFloat((p + 10) * res);
-    float y = GenerateHashedRandomFloat((p + 20) * res);
-    return float2(x, y) * 2 - 1;
-}
-
-float GetNoise(float2 p)
-{
-    return SAMPLE_TEXTURE2D(_NoiseTexture, s_linear_repeat_sampler, p).r;
-}
+//
+// Texture sampling functions
+//
 
 float3 SampleColor(float2 p)
 {
@@ -66,28 +72,35 @@ float SampleLuminance(float2 p)
     return Luminance(SampleColor(p));
 }
 
+float3 SampleNoise(float2 p)
+{
+    return SAMPLE_TEXTURE2D(_NoiseTexture, s_linear_repeat_sampler, p);
+}
+
+//
+// Gradient function
+//
+
 float2 GetGradient(float2 p)
 {
     const float2 dx = float2(1.0 / 200, 0);
     float ldx = SampleLuminance(p + dx.xy) - SampleLuminance(p - dx.xy);
     float ldy = SampleLuminance(p + dx.yx) - SampleLuminance(p - dx.yx);
-    return float2(ldx, ldy) + RandomVector(p) / 100;
+    float2 n = (SampleNoise(p * 0.4).gb - 0.5);
+    return float2(ldx, ldy) + n * 0.05;
 }
 
-float2 Rotate90(float2 v)
-{
-    return v.yx * float2(-1, 1);
-}
+//
+// Edge / fill processing functions
+//
 
 float ProcessEdge(inout float2 p, float stride)
 {
     float2 grad = GetGradient(p);
     float edge = saturate(length(grad) * 10);
-    //float bw = smoothstep(0.45, 0.55, GetNoise(p * 0.4));
-    float bw = GetNoise(p * 0.2);
+    float pattern = SampleNoise(p * 0.8).r;
     p += normalize(Rotate90(grad)) * stride;
-    //return lerp(1, bw, smoothstep(0.4, 1, edge));
-    return lerp(1, bw, edge);
+    return lerp(1, pattern, edge);
 }
 
 float3 ProcessFill(inout float2 p, float stride)
@@ -96,6 +109,10 @@ float3 ProcessFill(inout float2 p, float stride)
     p += normalize(grad) * stride;
     return SampleColor(p);
 }
+
+//
+// Fragment shader implementation
+//
 
 float4 Fragment(Varyings input) : SV_Target
 {
@@ -109,7 +126,7 @@ float4 Fragment(Varyings input) : SV_Target
     float2 p_c_p = p;
 
     const uint Iteration = 24;
-    const float Stride = 1.0 / 800;
+    const float Stride = 0.002;
 
     float  acc_e = 0;
     float3 acc_c = 0;
@@ -119,19 +136,18 @@ float4 Fragment(Varyings input) : SV_Target
     for (uint i = 0; i < Iteration; i++)
     {
         float w_e = 1.5 - (float)i / Iteration;
-        float w_c = 0.2 + (float)i / Iteration;
-        acc_e += ProcessEdge(p_e_n, Stride * -1.8) * w_e;
-        acc_e += ProcessEdge(p_e_p, Stride * +1.8) * w_e;
+        acc_e += ProcessEdge(p_e_n, -Stride) * w_e;
+        acc_e += ProcessEdge(p_e_p, +Stride) * w_e;
         sum_e += w_e * 2;
-        acc_c += ProcessFill(p_c_n, -Stride * 1.8) * w_c;
-        acc_c += ProcessFill(p_c_p, +Stride * 1.8) * w_c * 0.3;
+
+        float w_c = 0.2 + (float)i / Iteration;
+        acc_c += ProcessFill(p_c_n, -Stride) * w_c;
+        acc_c += ProcessFill(p_c_p, +Stride) * w_c * 0.3;
         sum_c += w_c * 1.3;
     }
 
     acc_e /= sum_e;
     acc_c /= sum_c;
-    //acc_e = smoothstep(0.0, 1, acc_e);
-    //acc_c = 1;
 
     return float4(acc_c * acc_e, 1);
 }

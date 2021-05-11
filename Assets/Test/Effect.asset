@@ -61,4 +61,4 @@ MonoBehaviour:
     m_Value: 1
   noiseTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 2800000, guid: bf25cd6288e2c8d43854a61a8496a830, type: 3}
+    m_Value: {fileID: 2800000, guid: 78b5e41a3a01c4aca9be171d2c3e33f5, type: 3}
