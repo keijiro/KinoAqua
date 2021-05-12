@@ -20,6 +20,10 @@ System Requirements
 Although KinoAqua is compatible with all the HDRP-supported systems, it's
 pretty slow and unoptimized. Don't try to run it on mobiles.
 
+Note that the test project contained in this repository was created using Unity
+2021.2. You must install Unity 2012.2.0 (it's still in the alpha phase at the
+point I wrote this document) to try the project.
+
 How to install the package
 --------------------------
 
