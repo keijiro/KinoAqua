@@ -2,6 +2,7 @@ KinoAqua
 ========
 
 ![screenshot](https://i.imgur.com/AqIJD8rl.jpg)
+![gif](https://i.imgur.com/ZiZ0Avs.gif)
 
 **KinoAqua** is a custom post-processing effect for Unity HDRP that creates a
 simple watercolor effect.
