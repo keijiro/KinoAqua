@@ -2,6 +2,7 @@ KinoAqua
 ========
 
 ![screenshot](https://i.imgur.com/AqIJD8rl.jpg)
+![gif](https://i.imgur.com/ZiZ0Avs.gif)
 
 **KinoAqua** is a custom post-processing effect for Unity HDRP that creates a
 simple watercolor effect.
@@ -44,7 +45,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.kino.aqua": "1.0.1"
+"jp.keijiro.kino.aqua": "1.0.2"
 ```
 
 After changes, the manifest file should look like below:
@@ -59,7 +60,7 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.kino.aqua": "1.0.1",
+    "jp.keijiro.kino.aqua": "1.0.2",
 ...
 ```
 

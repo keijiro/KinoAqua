@@ -58,14 +58,14 @@ float2 Rotate90(float2 v)
 float2 UV2SC(float2 uv)
 {
     float2 p = uv - 0.5;
-    p.x *= _ScreenParams.x / _ScreenParams.y;
+    p.x *= _ScreenSize.x / _ScreenSize.y;
     return p;
 }
 
 // Vertically normalized screen coordinates to UV
 float2 SC2UV(float2 p)
 {
-    p.x *= _ScreenParams.y / _ScreenParams.x;
+    p.x *= _ScreenSize.y / _ScreenSize.x;
     return p + 0.5;
 }
 
@@ -75,7 +75,7 @@ float2 SC2UV(float2 p)
 
 float3 SampleColor(float2 p)
 {
-    float2 uv = SC2UV(p);
+    float2 uv = SC2UV(p) * _RTHandleScale.xy;
     return SAMPLE_TEXTURE2D_X(_InputTexture, s_linear_clamp_sampler, uv).rgb;
 }
 
