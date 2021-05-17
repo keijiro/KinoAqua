@@ -75,7 +75,7 @@ float2 SC2UV(float2 p)
 
 float3 SampleColor(float2 p)
 {
-    float2 uv = SC2UV(p) * _RTHandleScale.xy;
+    float2 uv = ClampAndScaleUVForBilinear(SC2UV(p));
     return SAMPLE_TEXTURE2D_X(_InputTexture, s_linear_clamp_sampler, uv).rgb;
 }
 
