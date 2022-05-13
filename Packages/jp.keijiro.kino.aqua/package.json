@@ -1,13 +1,13 @@
 {
     "author": "Keijiro Takahashi",
-    "dependencies": { "com.unity.render-pipelines.high-definition": "7.4.1" },
+    "dependencies": { "com.unity.render-pipelines.high-definition": "12.1.0" },
     "description": "Watercolor post-processing effect",
     "displayName": "KinoAqua",
     "keywords": [ "unity" ],
     "license": "Unlicense",
     "name": "jp.keijiro.kino.aqua",
     "repository": "github:keijiro/KinoAqua",
-    "unity": "2019.4",
+    "unity": "2021.3",
     "unityRelease": "0f1",
     "version": "1.0.3"
 }
