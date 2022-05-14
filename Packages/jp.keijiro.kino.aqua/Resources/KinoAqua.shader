@@ -8,7 +8,7 @@ Shader "Hidden/Kino/PostProcess/Aqua"
             HLSLPROGRAM
             #pragma vertex Vertex
             #pragma fragment Fragment
-            #include "Aqua.hlsl"
+            #include "KinoAqua.hlsl"
             ENDHLSL
         }
     }
