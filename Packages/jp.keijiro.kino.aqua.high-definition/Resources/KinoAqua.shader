@@ -1,4 +1,4 @@
-Shader "Hidden/Kino/PostProcess/Aqua"
+Shader "Hidden/Kino/Aqua/HighDefinition"
 {
     SubShader
     {

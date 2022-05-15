@@ -12,9 +12,9 @@
 #define KINO_AQUA_SAMPLE_NOISE_TEXTURE(p) \
   SAMPLE_TEXTURE2D(noiseTexture, s_linear_repeat_sampler, p)
 
-#include "KinoAquaFilter.hlsl"
+#include "Packages/jp.keijiro.kino.aqua/Shaders/KinoAquaFilter.hlsl"
 
-TEXTURE2D_X(_InputTexture);
+TEXTURE2D_X(_MainTex);
 TEXTURE2D(_NoiseTexture);
 
 float4 _EffectParams1;
@@ -54,7 +54,7 @@ float4 Fragment(Varyings input) : SV_Target
 
     KinoAquaFilter aqua;
 
-    aqua.inputTexture = _InputTexture;
+    aqua.inputTexture = _MainTex;
     aqua.noiseTexture = _NoiseTexture;
 
     aqua.edgeColor = _EdgeColor;
@@ -73,7 +73,7 @@ float4 Fragment(Varyings input) : SV_Target
     aqua.edgeContrast  = _EffectParams2.x;
     aqua.hueShift      = _EffectParams2.y;
 
-    float4 src = LOAD_TEXTURE2D_X(_InputTexture, uv * _ScreenSize.xy);
+    float4 src = LOAD_TEXTURE2D_X(_MainTex, uv * _ScreenSize.xy);
     float3 filtered = aqua.ProcessAt(uv);
     return float4(lerp(src.rgb, filtered, opacity), src.a);
 }

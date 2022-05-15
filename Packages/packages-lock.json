@@ -90,6 +90,14 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
+        "com.unity.render-pipelines.core": "12.1.0"
+      }
+    },
+    "jp.keijiro.kino.aqua.high-definition": {
+      "version": "file:jp.keijiro.kino.aqua.high-definition",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
         "com.unity.render-pipelines.high-definition": "12.1.0"
       }
     },
