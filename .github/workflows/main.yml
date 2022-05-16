@@ -14,3 +14,11 @@ jobs:
       working-directory: Packages/jp.keijiro.kino.aqua
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    - run: npm publish
+      working-directory: Packages/jp.keijiro.kino.aqua.high-definition
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    - run: npm publish
+      working-directory: Packages/jp.keijiro.kino.aqua.universal
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
