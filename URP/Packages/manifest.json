@@ -1,0 +1,15 @@
+{
+  "scopedRegistries": [
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "jp.keijiro"
+      ]
+    }
+  ],
+  "dependencies": {
+    "jp.keijiro.kino.aqua": "file:../../jp.keijiro.kino.aqua",
+    "jp.keijiro.kino.aqua.universal": "file:../../jp.keijiro.kino.aqua.universal"
+  }
+}
