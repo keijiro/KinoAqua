@@ -98,7 +98,8 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "com.unity.render-pipelines.high-definition": "12.1.0"
+        "com.unity.render-pipelines.high-definition": "12.1.0",
+        "jp.keijiro.kino.aqua": "2.0.1"
       }
     },
     "jp.keijiro.kino.post-processing": {
