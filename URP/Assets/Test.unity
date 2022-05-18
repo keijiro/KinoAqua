@@ -782,12 +782,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _opacity: 1
-  _edgeColor: {r: 0, g: 0, b: 0, a: 1}
+  _edgeColor: {r: 0.14150941, g: 0.019357424, b: 0.019357424, a: 1}
   _edgeContrast: 1.2
-  _fillColor: {r: 1, g: 1, b: 1, a: 1}
-  _blurWidth: 1
+  _fillColor: {r: 0.8679245, g: 0.77095824, b: 0.63456744, a: 1}
+  _blurWidth: 1.35
   _blurFrequency: 0.5
   _hueShift: 0.1
-  _interval: 1
+  _interval: 1.25
   _iteration: 20
   _shader: {fileID: -6465566751694194690, guid: 3e152a7c1e1bb4527901f4b4a55fbbc3, type: 3}
