@@ -2,10 +2,12 @@
 #define KINO_AQUA_NOISE_TEXTURE(n) TEXTURE2D(n)
 
 #define KINO_AQUA_SAMPLE_INPUT_TEXTURE(p) \
-  SAMPLE_TEXTURE2D(inputTexture, default_sampler_Linear_Repeat, p)
+  SAMPLE_TEXTURE2D(inputTexture, s_linear_clamp_sampler, p)
 
 #define KINO_AQUA_SAMPLE_NOISE_TEXTURE(p) \
   SAMPLE_TEXTURE2D(noiseTexture, default_sampler_Linear_Repeat, p)
+
+SAMPLER(s_linear_clamp_sampler);
 
 #include "Packages/jp.keijiro.kino.aqua/Shaders/KinoAquaFilter.hlsl"
 
