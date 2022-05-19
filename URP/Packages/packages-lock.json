@@ -76,8 +76,26 @@
       "source": "local",
       "dependencies": {
         "com.unity.render-pipelines.universal": "12.1.0",
-        "jp.keijiro.kino.aqua": "2.0.1"
+        "jp.keijiro.kino.aqua": "2.0.1",
+        "jp.keijiro.shadergraphassets": "2.5.1"
       }
+    },
+    "jp.keijiro.noiseshader": {
+      "version": "2.0.0",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.com"
+    },
+    "jp.keijiro.shadergraphassets": {
+      "version": "2.5.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.shadergraph": "12.1.0",
+        "jp.keijiro.noiseshader": "2.0.0"
+      },
+      "url": "https://registry.npmjs.com"
     },
     "com.unity.modules.imgui": {
       "version": "1.0.0",

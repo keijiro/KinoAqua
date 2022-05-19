@@ -21,6 +21,9 @@ public sealed class AquaEffect : MonoBehaviour
     [Space]
     [SerializeField, Range(0.1f, 5)] float _interval = 1;
     [SerializeField, Range(4, 32)] int _iteration = 20;
+    [Space]
+    [SerializeField] Texture2D _overlayTexture = null;
+    [SerializeField, Range(0, 1)] float _overlayOpacity = 0;
 
     #endregion
 
@@ -39,6 +42,12 @@ public sealed class AquaEffect : MonoBehaviour
     #region Private members
 
     Material _material;
+
+    static class ShaderIDs
+    {
+        public static int OverlayOpacity = Shader.PropertyToID("_OverlayOpacity");
+        public static int OverlayTexture = Shader.PropertyToID("_OverlayTexture");
+    }
 
     #endregion
 
@@ -63,6 +72,9 @@ public sealed class AquaEffect : MonoBehaviour
            hueShift: _hueShift,
            interval: _interval,
            iteration: _iteration);
+
+        _material.SetTexture(ShaderIDs.OverlayTexture, _overlayTexture);
+        _material.SetFloat(ShaderIDs.OverlayOpacity, _overlayOpacity);
     }
 
     #endregion
