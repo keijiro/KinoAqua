@@ -1,8 +1,13 @@
 #define KINO_AQUA_INPUT_TEXTURE(n) TEXTURE2D(n)
 #define KINO_AQUA_NOISE_TEXTURE(n) TEXTURE2D(n)
 
+#ifdef UNITY_COLORSPACE_GAMMA
+#define KINO_AQUA_SAMPLE_INPUT_TEXTURE(p) \
+  SRGBToLinear(SAMPLE_TEXTURE2D(inputTexture, s_linear_clamp_sampler, p))
+#else
 #define KINO_AQUA_SAMPLE_INPUT_TEXTURE(p) \
   SAMPLE_TEXTURE2D(inputTexture, s_linear_clamp_sampler, p)
+#endif
 
 #define KINO_AQUA_SAMPLE_NOISE_TEXTURE(p) \
   SAMPLE_TEXTURE2D(noiseTexture, default_sampler_Linear_Repeat, p)
@@ -44,4 +49,8 @@ void AquaEffect_float(float2 UV, out float3 Out)
     aqua.hueShift      = _EffectParams2.y;
 
     Out = aqua.ProcessAt(UV);
+
+#ifdef UNITY_COLORSPACE_GAMMA
+    Out = LinearToSRGB(Out);
+#endif
 }
