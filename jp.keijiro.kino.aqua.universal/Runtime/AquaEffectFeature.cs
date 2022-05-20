@@ -25,7 +25,7 @@ public sealed class AquaEffectFeature : ScriptableRendererFeature
 
     public override void Create()
       => _pass = new AquaEffectPass
-           { renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing };
+           { renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing };
 
     public override void AddRenderPasses
       (ScriptableRenderer renderer, ref RenderingData data)
