@@ -1,0 +1,18 @@
+{
+    "name": "Kino.Aqua.Universal.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6b072e7d799bb4e4dab79236591e9e45"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

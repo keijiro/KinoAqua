@@ -141,3 +141,20 @@ struct KinoAquaFilter
         return rgb_e * rgb_f;
     }
 };
+
+float3 KinoAquaOverlay(float3 c1, float3 c2, float alpha)
+{
+    float3 c;
+#if defined(KINO_AQUA_MULTIPLY)
+    c = c1 * c2;
+#elif defined(KINO_AQUA_OVERLAY)
+    float3 a = c1 * c2 * 2;
+    float3 b = 1 - (1 - c1) * (1 - c2) * 2;
+    c = lerp(a, b, c1 > 0.5);
+#elif defined(KINO_AQUA_SCREEN)
+    c = 1 - (1 - c1) * (1 - c2);
+#else
+    c = c1;
+#endif
+    return lerp(c1, c, alpha);
+}

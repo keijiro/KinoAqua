@@ -23,7 +23,7 @@ float4 _EdgeColor;
 float4 _FillColor;
 uint _Iteration;
 
-void AquaEffect_float(float2 UV, out float3 Out)
+void AquaEffect_float(float2 UV, float4 overlay, out float3 Out)
 {
     KinoAquaFilter aqua;
 
@@ -50,7 +50,12 @@ void AquaEffect_float(float2 UV, out float3 Out)
 
     Out = aqua.ProcessAt(UV);
 
-#ifdef UNITY_COLORSPACE_GAMMA
     Out = LinearToSRGB(Out);
+#ifndef UNITY_COLORSPACE_GAMMA
+    overlay.rgb = LinearToSRGB(overlay.rgb);
+#endif
+    Out = KinoAquaOverlay(Out, overlay.rgb, overlay.a);
+#ifndef UNITY_COLORSPACE_GAMMA
+    Out = SRGBToLinear(Out);
 #endif
 }

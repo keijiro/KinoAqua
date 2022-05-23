@@ -10,18 +10,19 @@ public sealed class AquaEffect : MonoBehaviour
     #region Effect parameters
 
     [SerializeField, Range(0, 1)] float _opacity = 1;
-    [Space]
+
     [SerializeField] Color _edgeColor = Color.black;
     [SerializeField, Range(0.01f, 4)] float _edgeContrast = 1.2f;
-    [Space]
+
     [SerializeField] Color _fillColor = Color.white;
     [SerializeField, Range(0, 2)] float _blurWidth = 1;
     [SerializeField, Range(0, 1)] float _blurFrequency = 0.5f;
     [SerializeField, Range(0, 0.3f)] float _hueShift = 0.1f;
-    [Space]
+
     [SerializeField, Range(0.1f, 5)] float _interval = 1;
     [SerializeField, Range(4, 32)] int _iteration = 20;
-    [Space]
+
+    [SerializeField] OverlayMode _overlayMode = OverlayMode.Off;
     [SerializeField] Texture2D _overlayTexture = null;
     [SerializeField, Range(0, 1)] float _overlayOpacity = 0;
 
@@ -42,12 +43,6 @@ public sealed class AquaEffect : MonoBehaviour
     #region Private members
 
     Material _material;
-
-    static class ShaderIDs
-    {
-        public static int OverlayOpacity = Shader.PropertyToID("_OverlayOpacity");
-        public static int OverlayTexture = Shader.PropertyToID("_OverlayTexture");
-    }
 
     #endregion
 
@@ -73,8 +68,8 @@ public sealed class AquaEffect : MonoBehaviour
            interval: _interval,
            iteration: _iteration);
 
-        _material.SetTexture(ShaderIDs.OverlayTexture, _overlayTexture);
-        _material.SetFloat(ShaderIDs.OverlayOpacity, _overlayOpacity);
+        ShaderHelper.SetOverlayProperties
+          (_material, _overlayMode, _overlayTexture, _overlayOpacity);
     }
 
     #endregion
