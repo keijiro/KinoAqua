@@ -155,6 +155,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Standalone: com.DefaultCompany.KinoAquaURP
+    iPhone: com.DefaultCompany.KinoAquaURP
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -460,7 +461,7 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: As effect image source
   locationUsageDescription: 
   microphoneUsageDescription: 
   bluetoothUsageDescription: 
