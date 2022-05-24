@@ -15,15 +15,11 @@ public sealed class Aqua
     public ClampedFloatParameter opacity
       = new ClampedFloatParameter(0, 0, 1);
 
-    [Space]
-
     public ColorParameter edgeColor
       = new ColorParameter(Color.black);
 
     public ClampedFloatParameter edgeContrast
       = new ClampedFloatParameter(1.2f, 0.01f, 4);
-
-    [Space]
 
     public ColorParameter fillColor
       = new ColorParameter(Color.white);
@@ -37,15 +33,11 @@ public sealed class Aqua
     public ClampedFloatParameter hueShift
       = new ClampedFloatParameter(0.1f, 0, 0.3f);
 
-    [Space]
-
     public ClampedFloatParameter interval
       = new ClampedFloatParameter(1, 0.1f, 5);
 
     public ClampedIntParameter iteration
       = new ClampedIntParameter(20, 4, 32);
-
-    [Space]
 
     public VolumeParameter<OverlayMode> overlayMode
       = new VolumeParameter<OverlayMode>();
