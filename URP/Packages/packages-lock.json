@@ -85,7 +85,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.render-pipelines.universal": "12.1.0",
-        "jp.keijiro.kino.aqua": "2.0.2",
+        "jp.keijiro.kino.aqua": "2.1.0",
         "jp.keijiro.shadergraphassets": "2.5.1"
       }
     },

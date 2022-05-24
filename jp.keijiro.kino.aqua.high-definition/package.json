@@ -2,7 +2,7 @@
     "author": "Keijiro Takahashi",
     "dependencies": {
         "com.unity.render-pipelines.high-definition": "12.1.0",
-        "jp.keijiro.kino.aqua": "2.0.2"
+        "jp.keijiro.kino.aqua": "2.1.0"
     },
     "description": "Watercolor post-processing effect (for HDRP)",
     "displayName": "KinoAqua (HDRP)",
@@ -12,5 +12,5 @@
     "repository": "github:keijiro/KinoAqua",
     "unity": "2021.3",
     "unityRelease": "0f1",
-    "version": "2.0.2"
+    "version": "2.1.0"
 }
