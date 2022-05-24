@@ -48,8 +48,10 @@ void AquaEffect_float(float2 UV, float4 overlay, out float3 Out)
     aqua.edgeContrast  = _EffectParams2.x;
     aqua.hueShift      = _EffectParams2.y;
 
+    // Main effect
     Out = aqua.ProcessAt(UV);
 
+    // Overlay blending in sRGB
     Out = LinearToSRGB(Out);
 #ifndef UNITY_COLORSPACE_GAMMA
     overlay.rgb = LinearToSRGB(overlay.rgb);

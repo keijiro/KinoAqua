@@ -16,12 +16,14 @@
 
 TEXTURE2D_X(_MainTex);
 TEXTURE2D(_NoiseTexture);
+TEXTURE2D(_OverlayTexture);
 
 float4 _EffectParams1;
 float2 _EffectParams2;
 float4 _EdgeColor;
 float4 _FillColor;
 uint _Iteration;
+float _OverlayOpacity;
 
 struct Attributes
 {
@@ -73,7 +75,20 @@ float4 Fragment(Varyings input) : SV_Target
     aqua.edgeContrast  = _EffectParams2.x;
     aqua.hueShift      = _EffectParams2.y;
 
+    // Main effect
+    float3 res = aqua.ProcessAt(uv);
+
+    // Overlay blending in sRGB
+    float3 ovr = SAMPLE_TEXTURE2D(_OverlayTexture, s_linear_repeat_sampler, uv).rgb;
+
+    res = LinearToSRGB(res);
+    ovr = LinearToSRGB(ovr);
+
+    res = KinoAquaOverlay(res, ovr, _OverlayOpacity);
+
+    res = SRGBToLinear(res);
+
+    // Source/effect blending
     float4 src = LOAD_TEXTURE2D_X(_MainTex, uv * _ScreenSize.xy);
-    float3 filtered = aqua.ProcessAt(uv);
-    return float4(lerp(src.rgb, filtered, opacity), src.a);
+    return float4(lerp(src.rgb, res, opacity), src.a);
 }

@@ -45,6 +45,17 @@ public sealed class Aqua
     public ClampedIntParameter iteration
       = new ClampedIntParameter(20, 4, 32);
 
+    [Space]
+
+    public VolumeParameter<OverlayMode> overlayMode
+      = new VolumeParameter<OverlayMode>();
+
+    public NoInterpTextureParameter overlayTexture
+      = new NoInterpTextureParameter(null);
+
+    public ClampedFloatParameter overlayOpacity
+      = new ClampedFloatParameter(0, 0, 1);
+
     #endregion
 
     #region Private members
@@ -85,6 +96,13 @@ public sealed class Aqua
            hueShift: hueShift.value,
            interval: interval.value,
            iteration: iteration.value);
+
+        ShaderHelper.SetOverlayProperties
+          (_material,
+           overlayMode.value,
+           overlayTexture.value,
+           overlayOpacity.value);
+
         HDUtils.DrawFullScreen(cmd, _material, destRT, null, 0);
     }
 
