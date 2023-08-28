@@ -13,7 +13,7 @@ a watercolor effect. The shader implementation of the effect is inspired by
 System Requirements
 -------------------
 
-- Unity 2021.3 or later
+- Unity 2022.3 or later
 
 Note that the shader hasn't been optimized enough for practical use. Although
 it's compatible with most of the platforms, it may run significantly slow on

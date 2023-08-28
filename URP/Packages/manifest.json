@@ -9,11 +9,11 @@
     }
   ],
   "dependencies": {
-    "com.unity.visualeffectgraph": "12.1.6",
+    "com.unity.visualeffectgraph": "14.0.8",
     "jp.keijiro.kino.aqua": "file:../../jp.keijiro.kino.aqua",
     "jp.keijiro.kino.aqua.universal": "file:../../jp.keijiro.kino.aqua.universal",
-    "jp.keijiro.klak.motion": "1.0.2",
-    "jp.keijiro.klak.testtools": "1.0.3",
-    "jp.keijiro.vfxgraphassets": "1.0.10"
+    "jp.keijiro.klak.motion": "1.1.0",
+    "jp.keijiro.klak.testtools": "1.2.0",
+    "jp.keijiro.vfxgraphassets": "1.2.0"
   }
 }

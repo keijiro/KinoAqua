@@ -12,7 +12,7 @@
     "jp.keijiro.kino.aqua": "file:../../jp.keijiro.kino.aqua",
     "jp.keijiro.kino.aqua.high-definition": "file:../../jp.keijiro.kino.aqua.high-definition",
     "jp.keijiro.kino.post-processing": "2.1.15",
-    "jp.keijiro.klak.motion": "1.0.2",
-    "jp.keijiro.vfxgraphassets": "1.0.10"
+    "jp.keijiro.klak.motion": "1.1.0",
+    "jp.keijiro.vfxgraphassets": "1.2.0"
   }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Kino.PostProcessing {
 
-[VolumeComponentEditor(typeof(Aqua))]
+[CustomEditor(typeof(Aqua))]
 sealed class AquaEditor : VolumeComponentEditor
 {
     SerializedDataParameter _opacity;
